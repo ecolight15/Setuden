@@ -1,0 +1,14 @@
+newestresource: 1
+end_world_prefix: end
+crystal_guard_world_prefix: end
+sever-open-interval: 40
+setuden-scheduler: false
+level-name: world
+guard-frost:
+  - world
+  - world_nether
+  - world_thr_end
+test:
+    aaa: str1
+    bbb: str2
+    ccc: str3

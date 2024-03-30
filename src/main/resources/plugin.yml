@@ -1,0 +1,62 @@
+name: Setuden
+main: jp.minecraftuser.setuden.Setuden
+version: 0.2
+depend: [EcoFramework, EcoGate, EcoAdmin]
+softdepend: [EcoMQTTServerLog]
+api-version: 1.13
+commands:
+  setuden:
+    description: Setuden command.
+    usage: /<command>
+    permission: setuden
+  setuden reload:
+    description: Setuden command.
+    usage: /<command>
+    permission: setuden.reload
+  setuden mkbase:
+    description: Setuden make base command.
+    usage: /<command>
+    permission: setuden.mkbase
+  setuden mkbaseend:
+    description: Setuden make end base command.
+    usage: /<command>
+    permission: setuden.mkbaseend
+  setuden permission:
+    description: Setuden permission command.
+    usage: /<command>
+    permission: setuden.permission
+  setuden permission set:
+    description: Setuden permission set command.
+    usage: /<command>
+    permission: setuden.permission.set
+  setuden permission unset:
+    description: Setuden permission unset command.
+    usage: /<command>
+    permission: setuden.permission.unset
+  whois:
+    description: Setuden command.
+    usage: /<command>
+    permission: setuden.whois
+  setmsg:
+    description: Setuden command.
+    usage: /<command>
+    permission: setuden.setmsg
+  ent:
+    description: Setuden command.
+    usage: /<command>
+    permission: setuden.entrance
+  entrance:
+    description: Setuden command.
+    usage: /<command>
+    permission: setuden.entrance
+  plzombie:
+    description: Setuden command.
+    usage: /<command>
+    permission: setuden.plzombie
+  test:
+    description: Setuden command.
+    usage: /<command>
+    permission: setuden.test
+
+    
+    

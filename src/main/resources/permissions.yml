@@ -1,0 +1,5 @@
+#
+#sample_command:
+#- bukkit.command.tps
+#- minecraft.command.banlist
+#- minecraft.command.list
