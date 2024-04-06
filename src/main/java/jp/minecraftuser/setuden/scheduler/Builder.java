@@ -3,6 +3,12 @@ package jp.minecraftuser.setuden.scheduler;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.Directional;
+import org.bukkit.block.data.type.Chest;
+import org.bukkit.block.data.type.Chest.Type;
 
 /**
  *
@@ -10,7 +16,26 @@ import org.bukkit.Material;
  */
 public class Builder {
     
-    public static void mkbase(Location l) {
+        public static void setFace(Block block, BlockFace face) {
+            BlockData blockData = block.getBlockData();
+            if (blockData instanceof Directional) {
+                ((Directional) blockData).setFacing(face);
+                block.setBlockData(blockData);
+            }
+        }
+
+        public static void mergeChest(Block left, Block right) {
+            BlockData leftBlockData = left.getBlockData();
+            BlockData rightBlockData = right.getBlockData();
+            if ((leftBlockData instanceof Chest) && (rightBlockData instanceof Chest)) {
+                ((Chest) leftBlockData).setType(Type.LEFT);
+                ((Chest) rightBlockData).setType(Type.RIGHT);
+                left.setBlockData(leftBlockData);
+                right.setBlockData(rightBlockData);
+            }
+        }
+
+        public static void mkbase(Location l) {
         Location loc = l.clone();
         double baseX = l.getX();
         double baseY = l.getY();
@@ -44,9 +69,9 @@ public class Builder {
         loc.setX(baseX);
         loc.setY(baseY-0.5);
         loc.setZ(baseZ-4.5);
-        loc.getBlock().setType(Material.OBSIDIAN);
+        loc.getBlock().setType(Material.BEDROCK);
         loc.setY(baseY+2.5);
-        loc.getBlock().setType(Material.OBSIDIAN);
+        loc.getBlock().setType(Material.BEDROCK);
         loc.setY(baseY + 0.5);
         loc.getBlock().setType(Material.END_GATEWAY);
         loc.setY(baseY + 1.5);
@@ -65,21 +90,51 @@ public class Builder {
         // ついでに埋め込み作業台とかまどとチェスト
         loc.setX(baseX-4.5);
         loc.setY(baseY+0.5);
-        loc.setZ(baseZ);
+        loc.setZ(baseZ+0.5);
         loc.getBlock().setType(Material.CRAFTING_TABLE);
-        loc.setZ(baseZ+1.5);
-        loc.getBlock().setType(Material.CHEST);
-        loc.setZ(baseZ+2.5);
-        loc.getBlock().setType(Material.STONECUTTER);
-        loc.setZ(baseZ+3.5);
-        loc.getBlock().setType(Material.FURNACE);
-        loc.setZ(baseZ+4.5);
-        loc.getBlock().setType(Material.BLAST_FURNACE);
-        loc.setZ(baseZ+5.5);
-        loc.getBlock().setType(Material.SMOKER);
+        setFace(loc.getBlock(), BlockFace.EAST);
 
+        loc.setZ(baseZ+1.5);
+        Block leftChest = loc.getBlock();
+        leftChest.setType(Material.CHEST);
+        setFace(leftChest, BlockFace.EAST);
+        loc.setZ(baseZ+2.5);
+        Block rightChest = loc.getBlock();
+        rightChest.setType(Material.CHEST);
+        setFace(rightChest, BlockFace.EAST);
+        mergeChest(leftChest, rightChest);
+
+        loc.setY(baseY+1.5);
+        loc.setZ(baseZ+1.5);
+        leftChest = loc.getBlock();
+        leftChest.setType(Material.CHEST);
+        setFace(leftChest, BlockFace.EAST);
+        loc.setZ(baseZ+2.5);
+        rightChest = loc.getBlock();
+        rightChest.setType(Material.CHEST);
+        setFace(rightChest, BlockFace.EAST);
+        mergeChest(leftChest, rightChest);
+
+        loc.setY(baseY+0.5);
+        loc.setZ(baseZ+3.5);
+        loc.getBlock().setType(Material.STONECUTTER);
+        setFace(loc.getBlock(), BlockFace.EAST);
+        loc.setZ(baseZ+4.5);
+        loc.getBlock().setType(Material.FURNACE);
+        setFace(loc.getBlock(), BlockFace.EAST);
+        loc.setZ(baseZ+5.5);
+        loc.getBlock().setType(Material.BLAST_FURNACE);
+        setFace(loc.getBlock(), BlockFace.EAST);
+        loc.setZ(baseZ+6.5);
+        loc.getBlock().setType(Material.SMOKER);
+        setFace(loc.getBlock(), BlockFace.EAST);
+        loc.setY(baseY+1.5);
+        loc.setZ(baseZ+0.5);
+        loc.getBlock().setType(Material.ENDER_CHEST);
+        setFace(loc.getBlock(), BlockFace.EAST);
         return;
     }
+
     public static void mkbaseend(Location l) {
         Location loc = l.clone();
         double baseX = l.getX();
@@ -113,9 +168,9 @@ public class Builder {
         loc.setX(baseX);
         loc.setY(baseY);
         loc.setZ(baseZ);
-        loc.getBlock().setType(Material.OBSIDIAN);
+        loc.getBlock().setType(Material.BEDROCK);
         loc.setY(baseY+2.5);
-        loc.getBlock().setType(Material.OBSIDIAN);
+        loc.getBlock().setType(Material.BEDROCK);
         loc.setY(baseY + 0.5);
         loc.getBlock().setType(Material.END_GATEWAY);
         loc.setY(baseY + 1.5);
@@ -124,18 +179,49 @@ public class Builder {
         // ついでに埋め込み作業台とかまどとチェスト
         loc.setX(baseX-4.5);
         loc.setY(baseY+0.5);
-        loc.setZ(baseZ);
+        loc.setZ(baseZ+0.5);
         loc.getBlock().setType(Material.CRAFTING_TABLE);
+        setFace(loc.getBlock(), BlockFace.EAST);
+
         loc.setZ(baseZ+1.5);
-        loc.getBlock().setType(Material.CHEST);
+        Block leftChest = loc.getBlock();
+        leftChest.setType(Material.CHEST);
+        setFace(leftChest, BlockFace.EAST);
         loc.setZ(baseZ+2.5);
-        loc.getBlock().setType(Material.STONECUTTER);
+        Block rightChest = loc.getBlock();
+        rightChest.setType(Material.CHEST);
+        setFace(rightChest, BlockFace.EAST);
+        mergeChest(leftChest, rightChest);
+
+        loc.setY(baseY+1.5);
+        loc.setZ(baseZ+1.5);
+        leftChest = loc.getBlock();
+        leftChest.setType(Material.CHEST);
+        setFace(leftChest, BlockFace.EAST);
+        loc.setZ(baseZ+2.5);
+        rightChest = loc.getBlock();
+        rightChest.setType(Material.CHEST);
+        setFace(rightChest, BlockFace.EAST);
+        mergeChest(leftChest, rightChest);
+
+        loc.setY(baseY+0.5);
         loc.setZ(baseZ+3.5);
-        loc.getBlock().setType(Material.FURNACE);
+
+        loc.getBlock().setType(Material.STONECUTTER);
+        setFace(loc.getBlock(), BlockFace.EAST);
         loc.setZ(baseZ+4.5);
-        loc.getBlock().setType(Material.BLAST_FURNACE);
+        loc.getBlock().setType(Material.FURNACE);
+        setFace(loc.getBlock(), BlockFace.EAST);
         loc.setZ(baseZ+5.5);
+        loc.getBlock().setType(Material.BLAST_FURNACE);
+        setFace(loc.getBlock(), BlockFace.EAST);
+        loc.setZ(baseZ+6.5);
         loc.getBlock().setType(Material.SMOKER);
+        setFace(loc.getBlock(), BlockFace.EAST);
+        loc.setY(baseY+1.5);
+        loc.setZ(baseZ+0.5);
+        loc.getBlock().setType(Material.ENDER_CHEST);
+        setFace(loc.getBlock(), BlockFace.EAST);
 
         return;
     }

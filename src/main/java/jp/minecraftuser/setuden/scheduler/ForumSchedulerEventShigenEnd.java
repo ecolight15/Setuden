@@ -9,8 +9,10 @@ import static jp.minecraftuser.ecoframework.Utl.sendPluginMessage;
 import jp.minecraftuser.ecogate.EcoGate;
 import jp.minecraftuser.ecogate.config.EcoGateConfig;
 import org.bukkit.Location;
+import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.WorldBorder;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 /**
@@ -73,6 +75,14 @@ public class ForumSchedulerEventShigenEnd extends ForumSchedulerEventShigen {
         l.setY(40.0);
         l.setZ(0.0);
         Builder.mkbaseend(l);
+
+        // 保護を作成
+        Server server = plg.getServer();
+        CommandSender sender = plg.getServer().getConsoleSender();
+        server.dispatchCommand(sender, "/world " + w.getName());
+        server.dispatchCommand(sender, "/pos1 16,40,16");
+        server.dispatchCommand(sender, "/pos2 -17,40,-17");
+        server.dispatchCommand(sender, "region define -w " + w.getName() + " base");
 
         // 旧資源にいる人を強制転送
         for (Player p : old.getPlayers() ) {
