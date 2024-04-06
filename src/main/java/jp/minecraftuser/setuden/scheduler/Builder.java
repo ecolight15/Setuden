@@ -57,6 +57,10 @@ public class Builder {
         loc.setY(baseY-0.5);
         loc.setZ(baseZ+4.5);
         loc.getBlock().setType(Material.LIGHT_BLUE_STAINED_GLASS);
+        loc.setZ(baseZ+3.5);
+        loc.getBlock().setType(Material.LIME_STAINED_GLASS);
+        loc.setZ(baseZ+2.5);
+        loc.getBlock().setType(Material.YELLOW_STAINED_GLASS);
 
         // ついでに埋め込み作業台とかまどとチェスト
         loc.setX(baseX-4.5);
