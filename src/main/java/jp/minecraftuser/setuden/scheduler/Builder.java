@@ -171,10 +171,10 @@ public class Builder {
         loc.getBlock().setType(Material.BEDROCK);
         loc.setY(baseY+2.5);
         loc.getBlock().setType(Material.BEDROCK);
-        loc.setY(baseY + 0.5);
-        loc.getBlock().setType(Material.END_GATEWAY);
-        loc.setY(baseY + 1.5);
-        loc.getBlock().setType(Material.END_GATEWAY);
+        // loc.setY(baseY + 0.5);
+        // loc.getBlock().setType(Material.END_GATEWAY);
+        // loc.setY(baseY + 1.5);
+        // loc.getBlock().setType(Material.END_GATEWAY);
 
         // ついでに埋め込み作業台とかまどとチェスト
         loc.setX(baseX-4.5);

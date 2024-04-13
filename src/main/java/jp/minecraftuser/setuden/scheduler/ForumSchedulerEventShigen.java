@@ -120,14 +120,14 @@ public class ForumSchedulerEventShigen extends ForumSchedulerEvent {
         Server server = plg.getServer();
         CommandSender sender = plg.getServer().getConsoleSender();
         server.dispatchCommand(sender, "/world " + w.getName());
-        server.dispatchCommand(sender, "/pos1 16," + high + ",16");
+        server.dispatchCommand(sender, "/pos1 16," + (high - 1) + ",16");
         server.dispatchCommand(sender, "/pos2 -17," + (high + 10) + ",-17");
         server.dispatchCommand(sender, "region define -w " + w.getName() + " base");
         server.dispatchCommand(sender, "region flag base use -w " + w.getName() + " allow");
         server.dispatchCommand(sender, "region flag base chest-access -w " + w.getName() + " allow");
         server.dispatchCommand(sender, "region flag base water-flow -w " + w.getName() + " deny");
         server.dispatchCommand(sender, "region flag base lava-flow -w " + w.getName() + " deny");
-        server.dispatchCommand(sender, "region flag -w "+ w.getName() + " -h 4 base blocked-cmds /ent,/entrance,/setuden:ent,/setuden:entrance,/home,/homes:home");
+        //server.dispatchCommand(sender, "region flag -w "+ w.getName() + " -h 4 base blocked-cmds /ent,/entrance,/setuden:ent,/setuden:entrance,/home,/homes:home");
 
         // 旧資源にいる人を強制転送
         for (Player p : old.getPlayers() ) {

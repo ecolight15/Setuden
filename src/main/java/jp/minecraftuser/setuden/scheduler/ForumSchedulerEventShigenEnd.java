@@ -80,9 +80,10 @@ public class ForumSchedulerEventShigenEnd extends ForumSchedulerEventShigen {
         Server server = plg.getServer();
         CommandSender sender = plg.getServer().getConsoleSender();
         server.dispatchCommand(sender, "/world " + w.getName());
-        server.dispatchCommand(sender, "/pos1 16,40,16");
-        server.dispatchCommand(sender, "/pos2 -17,40,-17");
+        server.dispatchCommand(sender, "/pos1 16,39,16");
+        server.dispatchCommand(sender, "/pos2 -17,39,-17");
         server.dispatchCommand(sender, "region define -w " + w.getName() + " base");
+        server.dispatchCommand(sender, "region flag base enderdrafon-block-damage -w " + w.getName() + " deny");
 
         // 旧資源にいる人を強制転送
         for (Player p : old.getPlayers() ) {
