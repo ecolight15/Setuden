@@ -5,8 +5,12 @@ import jp.minecraftuser.ecoframework.PluginFrame;
 import jp.minecraftuser.ecoframework.CommandFrame;
 import jp.minecraftuser.setuden.db.WhoisDB;
 import static jp.minecraftuser.ecoframework.Utl.sendPluginMessage;
+import static jp.minecraftuser.ecoframework.Utl.sendTagMessage;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.List;
 
 /**
  * リロードコマンドクラス
@@ -48,11 +52,22 @@ public class WhoisCommand extends CommandFrame {
                 sendPluginMessage(plg, sender, "コンソールからはプレイヤー指定無しでは実行できません");
                 return true;
             }
-            sendPluginMessage(plg, sender, ((WhoisDB)plg.getDB("whois")).getWhois(sender.getName()));
+            SendLineMessage(sender, ((WhoisDB)plg.getDB("whois")).getWhois(sender.getName()));
         } else {
             // 自分以外
-            sendPluginMessage(plg, sender, ((WhoisDB)plg.getDB("whois")).getWhois(args[0]));
+            SendLineMessage(sender, ((WhoisDB)plg.getDB("whois")).getWhois(args[0]));
         }
         return true;
+    }
+    public void SendLineMessage(CommandSender sender,List<String> msg_list) {
+        boolean first = true;
+        for (String s : msg_list) {
+            if (first) {
+                sendPluginMessage(plg, sender, s);
+                first = false;
+            } else {
+                sendTagMessage(plg, sender, "", s);
+            }
+        }
     }
 }
