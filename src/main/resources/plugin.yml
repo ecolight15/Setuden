@@ -3,7 +3,7 @@ main: jp.minecraftuser.setuden.Setuden
 version: 0.2
 depend: [EcoFramework, EcoGate, EcoAdmin]
 softdepend: [EcoMQTTServerLog]
-api-version: 1.13
+api-version: 1.20
 commands:
   setuden:
     description: Setuden command.

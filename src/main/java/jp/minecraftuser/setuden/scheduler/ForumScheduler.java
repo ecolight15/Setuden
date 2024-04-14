@@ -41,6 +41,8 @@ public class ForumScheduler extends TimerFrame{
                 plg.getServer().dispatchCommand(plg.getServer().getConsoleSender(), "ecoadmin:lock プラグインの起動シーケンス中です。少々お待ちください。");
             }
         }
+        Date date = new Date();
+        prevminofweek = (int) (date.getTime() / 60000);
     }
     
     private void addSchedule(int youbi, int hour, int min, TypeEvent type, String... params) {
