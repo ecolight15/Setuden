@@ -4,6 +4,7 @@ package jp.minecraftuser.setuden.scheduler;
 import java.io.File;
 import java.text.MessageFormat;
 import jp.minecraftuser.ecoframework.PluginFrame;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 /**
@@ -26,14 +27,14 @@ public class ForumSchedulerEventKick extends ForumSchedulerEvent{
         }
         
         // 全ユーザのKICK処理
-        if (params.length >= 2) {
-            if (plg.getPluginFrame("EcoAdmin") != null) {
-                plg.getServer().dispatchCommand(plg.getServer().getConsoleSender(), "ecoadmin:lock "+params[1]);
-            }
-        }
-        MessageFormat mf = new MessageFormat("{0}のためサーバから切断されました。しばらくお待ちください。");
-        for (Player p: plg.getServer().getOnlinePlayers()) {
-            p.kickPlayer(mf.format(new String[]{params[0]}));
+        if (params.length >= 2 && plg.getPluginFrame("EcoAdmin") != null) {
+            //EcoAdmin側でkickする。
+            //メッセージの引数を渡してるけど、kickメッセージはMysqlPlayerDataBridgeのsaveAndKickCommandが表示されます。
+            //引数を渡さない場合ロックされません。
+            plg.getServer().dispatchCommand(plg.getServer().getConsoleSender(), "ecoadmin:lock "+params[1]);
+        }else{
+            String command = "mpdb saveAndkick";
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
         }
     }
 }
