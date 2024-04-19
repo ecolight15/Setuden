@@ -1,6 +1,6 @@
 /**
  * プレイヤー関連イベントリスナ―
- * 
+ *
  * PlayerQuit
  *   whoisログ
  * PlayerInteract
@@ -42,8 +42,10 @@ public class PlayerListener extends ListenerFrame {
      */
     public PlayerListener(PluginFrame plg_, String name_) {
         super(plg_, name_);
-        int visitor = new File(plg.getServer().getWorlds().get(0).getWorldFolder().getPath()+"/playerdata").listFiles().length;
-        prev_visitor = visitor;
+
+        //プレイヤーデータファイルの数を取得
+        prev_visitor = new File(plg.getServer().getWorld(conf.getString("level-name")).getWorldFolder().getPath()+"/playerdata").listFiles((File dir, String name) -> name.endsWith(".dat")).length;
+
     }
 
     @EventHandler(priority=EventPriority.LOWEST)
@@ -98,14 +100,12 @@ public class PlayerListener extends ListenerFrame {
         log.info("PlayerJoinEvent:" + event.getPlayer().getName());
 
         // 新規プレイヤー検出処理
-        plg.getServer().savePlayers();
-        int visitor = new File(plg.getServer().getWorld(conf.getString("level-name")).getWorldFolder().getPath()+"/playerdata").listFiles().length;
-        if (prev_visitor != visitor) {
-            plg.getServer().broadcastMessage("["+pl.getName()+"]さんは"+visitor+"人目の新規さんです。");
+        if(!pl.hasPlayedBefore()){
+            prev_visitor += 1;
+            plg.getServer().broadcastMessage("["+pl.getName()+"]さんは"+prev_visitor+"人目の新規さんです。");
         }
-        prev_visitor = visitor;
         new LoginDBTimer(plg, "logout_timer", pl, true).runTaskLaterAsynchronously(plg, 1);
-     }
+    }
 
 //    @EventHandler(priority=EventPriority.LOWEST)
 //    public void InventoryClick(InventoryClickEvent event) {

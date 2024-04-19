@@ -112,7 +112,15 @@ public class ForumScheduler extends TimerFrame{
                     TypeDayOfWeek.SUI.getValue() |
                     TypeDayOfWeek.MOKU.getValue() |
                     TypeDayOfWeek.KIN.getValue() |
-                    TypeDayOfWeek.DO.getValue() , 5, 0, TypeEvent.SAVE);
+                    TypeDayOfWeek.DO.getValue() , 5, 0, TypeEvent.KICK, "毎日5時の定例サーバ再起動", "サーバーの定例再起動中のため一時的にログインできません");
+
+        addSchedule(TypeDayOfWeek.NICHI.getValue() |
+                TypeDayOfWeek.GETSU.getValue() |
+                TypeDayOfWeek.KA.getValue() |
+                TypeDayOfWeek.SUI.getValue() |
+                TypeDayOfWeek.MOKU.getValue() |
+                TypeDayOfWeek.KIN.getValue() |
+                TypeDayOfWeek.DO.getValue() , 5, 1, TypeEvent.SAVE);
 //        addSchedule(TypeDayOfWeek.NICHI.getValue() |
 //                    TypeDayOfWeek.GETSU.getValue() |
 //                    TypeDayOfWeek.KA.getValue() |

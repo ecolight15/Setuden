@@ -6,8 +6,12 @@ import jp.minecraftuser.ecoframework.CommandFrame;
 import jp.minecraftuser.setuden.db.WhoisDB;
 import jp.minecraftuser.ecoframework.Utl;
 import static jp.minecraftuser.ecoframework.Utl.sendPluginMessage;
+import static jp.minecraftuser.ecoframework.Utl.sendTagMessage;
+
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
+
+import java.util.List;
 
 /**
  * リロードコマンドクラス
@@ -43,7 +47,7 @@ public class SetmsgCommand extends CommandFrame {
     public boolean worker(CommandSender sender, String[] args) {
         if (args.length == 0) {
             ((WhoisDB)plg.getDB("whois")).updateMassage((OfflinePlayer) sender, null);
-            sendPluginMessage(plg, sender, ((WhoisDB)plg.getDB("whois")).getWhois(sender.getName()));
+            SendLineMessage(sender, ((WhoisDB)plg.getDB("whois")).getWhois(sender.getName()));
         } else {
             // 自分のメッセージ設定
             StringBuilder str = new StringBuilder();
@@ -54,9 +58,21 @@ public class SetmsgCommand extends CommandFrame {
                 str.append(args[i]);
             }
             ((WhoisDB)plg.getDB("whois")).updateMassage((OfflinePlayer) sender, Utl.repColor(str.toString()));
-            sendPluginMessage(plg, sender, ((WhoisDB)plg.getDB("whois")).getWhois(sender.getName()));
+            SendLineMessage(sender, ((WhoisDB)plg.getDB("whois")).getWhois(sender.getName()));
         }
         return true;
     }
-    
+
+    public void SendLineMessage(CommandSender sender,List<String> msg_list) {
+        boolean first = true;
+        for (String s : msg_list) {
+            if (first) {
+                sendPluginMessage(plg, sender, s);
+                first = false;
+            } else {
+                sendTagMessage(plg, sender, "", s);
+            }
+        }
+    }
+
 }

@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import jp.minecraftuser.setuden.scheduler.ForumSchedulerEventKick;
 import jp.minecraftuser.setuden.test.DB;
 import jp.minecraftuser.setuden.test.TestMessageThread;
 import jp.minecraftuser.setuden.test.TestPayload;
@@ -545,6 +547,12 @@ public class TestCommand extends CommandFrame {
             }
         } else if (args[0].equalsIgnoreCase("plsave")) {
             Bukkit.savePlayers();
+        } else if (args[0].equalsIgnoreCase("kicksave")) {
+            if (args.length == 2) {
+                plg.getServer().dispatchCommand(plg.getServer().getConsoleSender(), "ecoadmin:lock "+args[1]);
+            } else {
+                plg.getServer().dispatchCommand(plg.getServer().getConsoleSender(), "ecoadmin:lock test");
+            }
         }
 
         return true;
