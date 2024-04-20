@@ -121,7 +121,13 @@ public class ForumSchedulerEventShigen extends ForumSchedulerEvent {
         CommandSender sender = plg.getServer().getConsoleSender();
         server.dispatchCommand(sender, "/world " + w.getName());
         server.dispatchCommand(sender, "/pos1 16," + (high - 1) + ",16");
+        server.dispatchCommand(sender, "/pos2 -17," + (high - 1) + ",-17");
+        server.dispatchCommand(sender, "region define -w " + w.getName() + " base1");
+        server.dispatchCommand(sender, "/pos1 16," + (high + 10) + ",16");
         server.dispatchCommand(sender, "/pos2 -17," + (high + 10) + ",-17");
+        server.dispatchCommand(sender, "region define -w " + w.getName() + " base2");
+        server.dispatchCommand(sender, "/pos1 -5," + (high) + ",6");
+        server.dispatchCommand(sender, "/pos2 -5," + (high + 1) + ",0");
         server.dispatchCommand(sender, "region define -w " + w.getName() + " base");
         server.dispatchCommand(sender, "region flag base use -w " + w.getName() + " allow");
         server.dispatchCommand(sender, "region flag base chest-access -w " + w.getName() + " allow");

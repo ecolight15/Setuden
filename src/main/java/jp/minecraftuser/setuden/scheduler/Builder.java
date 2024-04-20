@@ -16,26 +16,26 @@ import org.bukkit.block.data.type.Chest.Type;
  */
 public class Builder {
     
-        public static void setFace(Block block, BlockFace face) {
-            BlockData blockData = block.getBlockData();
-            if (blockData instanceof Directional) {
-                ((Directional) blockData).setFacing(face);
-                block.setBlockData(blockData);
-            }
+    public static void setFace(Block block, BlockFace face) {
+        BlockData blockData = block.getBlockData();
+        if (blockData instanceof Directional) {
+            ((Directional) blockData).setFacing(face);
+            block.setBlockData(blockData);
         }
+    }
 
-        public static void mergeChest(Block left, Block right) {
-            BlockData leftBlockData = left.getBlockData();
-            BlockData rightBlockData = right.getBlockData();
-            if ((leftBlockData instanceof Chest) && (rightBlockData instanceof Chest)) {
-                ((Chest) leftBlockData).setType(Type.LEFT);
-                ((Chest) rightBlockData).setType(Type.RIGHT);
-                left.setBlockData(leftBlockData);
-                right.setBlockData(rightBlockData);
-            }
+    public static void mergeChest(Block left, Block right) {
+        BlockData leftBlockData = left.getBlockData();
+        BlockData rightBlockData = right.getBlockData();
+        if ((leftBlockData instanceof Chest) && (rightBlockData instanceof Chest)) {
+            ((Chest) leftBlockData).setType(Type.LEFT);
+            ((Chest) rightBlockData).setType(Type.RIGHT);
+            left.setBlockData(leftBlockData);
+            right.setBlockData(rightBlockData);
         }
+    }
 
-        public static void mkbase(Location l) {
+    public static void mkbase(Location l) {
         Location loc = l.clone();
         double baseX = l.getX();
         double baseY = l.getY();
@@ -166,10 +166,10 @@ public class Builder {
 
         // ゲート位置設定
         loc.setX(baseX);
-        loc.setY(baseY);
+        loc.setY(baseY - 0.5);
         loc.setZ(baseZ);
         loc.getBlock().setType(Material.BEDROCK);
-        loc.setY(baseY+2.5);
+        loc.setY(baseY + 2.5);
         loc.getBlock().setType(Material.BEDROCK);
         // loc.setY(baseY + 0.5);
         // loc.getBlock().setType(Material.END_GATEWAY);
