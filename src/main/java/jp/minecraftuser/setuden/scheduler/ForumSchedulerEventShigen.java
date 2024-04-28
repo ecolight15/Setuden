@@ -65,9 +65,16 @@ public class ForumSchedulerEventShigen extends ForumSchedulerEvent {
         Block workBlock;
         while (true) {
             workBlock = w.getBlockAt(0, max, 0);
-            if (!workBlock.getType().isAir()) {
+            Material type = workBlock.getType();
+            log.info("Check block(y=" + max + "):" + type.toString());
+            if ((!type.isAir()) && 
+                (!type.name().toLowerCase().endsWith("_log")) &&
+                (!type.name().toLowerCase().endsWith("_leaves")) &&
+                (!type.name().toLowerCase().endsWith("_mushroom_block")) &&
+                (!type.name().toLowerCase().endsWith("mushroom_stem"))) {
                 break;
             }
+            if (max < 60) break;
             max--;
         }
         if (workBlock.getType() != Material.WATER) {
