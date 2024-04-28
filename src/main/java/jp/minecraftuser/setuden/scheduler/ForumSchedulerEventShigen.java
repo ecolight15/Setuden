@@ -16,9 +16,11 @@ import static jp.minecraftuser.ecoframework.Utl.sendPluginMessage;
 import jp.minecraftuser.ecogate.EcoGate;
 import jp.minecraftuser.ecogate.config.EcoGateConfig;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.WorldBorder;
+import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -58,37 +60,21 @@ public class ForumSchedulerEventShigen extends ForumSchedulerEvent {
         ((Setuden)plg).getDefaultConfig().getConf().set("newestresource", resnum + 1);
         ((SetudenConfig)((Setuden)plg).getDefaultConfig()).saveConfig();
         ((Setuden)plg).getDefaultConfig().reload();
-//        plg.incrementResourceNum();
 
-        // 高さランダム化
-        Random r = new Random();
-        int high = 0;
-        String path = plg.getDataFolder().getPath() + "/targetHeight";
-        File file = new File(path);
-        if (file.exists()) {
-            try {
-                String str;
-                BufferedReader bfReader = new BufferedReader(new InputStreamReader(new FileInputStream(path), Charset.forName("UTF-8")));
-                while ((str = bfReader.readLine()) != null) {
-                    log.info("detect generation height:" + str);
-                    high = Integer.parseInt(str, 10);
-                    if (high < -63 || high > 318) {
-                        high = r.nextInt(310 + 64) - 62;
-                        log.info("detect invalid generation height");
-                    }
-                }
-                bfReader.close();
-            } catch(NumberFormatException ex) {
-                ex.printStackTrace();
-                high = r.nextInt(310 + 64) - 62;
-
-            } catch (IOException ex) {
-                ex.printStackTrace();
-                high = r.nextInt(310 + 64) - 62;
+        int max = w.getMaxHeight() - 1;
+        Block workBlock;
+        while (true) {
+            workBlock = w.getBlockAt(0, max, 0);
+            if (!workBlock.getType().isAir()) {
+                break;
             }
-        } else {
-            high = r.nextInt(310 + 64) - 62;
+            max--;
         }
+        if (workBlock.getType() != Material.WATER) {
+            max -= 2;
+        }
+        int high = max;
+
         // ゲートの貼り直し
         PluginConfigUpdate.replaceGate(plg, "shigen"+(resnum-1), "shigen"+(resnum+1), "shigen"+(resnum-1)+"b", "shigen"+(resnum+1)+"b", w.getName(), high);
 
