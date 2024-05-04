@@ -79,6 +79,8 @@ public class ForumSchedulerEventShigen extends ForumSchedulerEvent {
         }
         if (workBlock.getType() != Material.WATER) {
             max -= 2;
+        } else {
+            max += 1;
         }
         int high = max;
 
