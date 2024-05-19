@@ -48,7 +48,7 @@ public class EntCommand extends CommandFrame {
     public boolean worker(CommandSender sender, String[] args) {
         Player player = (Player) sender;
         if (player != null) {
-            WarpManager.sendWarpPlayer(player, player.getName(), "entrance", true, false);
+            WarpManager.sendWarpPlayer(player, player.getName(), "entrance", true, true);
             return true;
         }
         return true;
