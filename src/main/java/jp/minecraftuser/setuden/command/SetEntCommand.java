@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
  *
  * @author ecolight
  */
-public class EntCommand extends CommandFrame {
+public class SetEntCommand extends CommandFrame {
     private static SetudenConfig ecaConf = null;
 
     /**
@@ -22,7 +22,7 @@ public class EntCommand extends CommandFrame {
      * @param plg_  プラグインインスタンス
      * @param name_ コマンド名
      */
-    public EntCommand(PluginFrame plg_, String name_) {
+    public SetEntCommand(PluginFrame plg_, String name_) {
         super(plg_, name_);
         ecaConf = (SetudenConfig) conf;
     }
@@ -34,7 +34,7 @@ public class EntCommand extends CommandFrame {
      */
     @Override
     public String getPermissionString() {
-        return "setuden.entrance";
+        return "setuden.setentrance";
     }
 
     /**
@@ -46,10 +46,14 @@ public class EntCommand extends CommandFrame {
      */
     @Override
     public boolean worker(CommandSender sender, String[] args) {
+        // ワールド指定でイベント中なら該当ワールド以外は有効とする
         Player player = (Player) sender;
+
         if (player != null) {
-            WarpManager.sendWarpPlayer(player, player.getName(), "entrance", true, false);
+            WarpManager.sendSetWarp(player, "entrance", player.getLocation(), false, true);
             return true;
+
+
         }
         return true;
     }

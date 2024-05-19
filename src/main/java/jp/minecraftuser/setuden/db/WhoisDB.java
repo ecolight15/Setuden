@@ -217,7 +217,7 @@ public class WhoisDB extends DatabaseFrame {
         } else {
             long total_play_second = player.getStatistic(Statistic.TOTAL_WORLD_TIME) / 20;
             long play_day = total_play_second / 86400;
-            long play_hour = total_play_second / 3600;
+            long play_hour = total_play_second % 3600;
             long play_minute = (total_play_second % 3600) / 60;
             long play_second = total_play_second % 60;
             StringBuilder b = new StringBuilder();
