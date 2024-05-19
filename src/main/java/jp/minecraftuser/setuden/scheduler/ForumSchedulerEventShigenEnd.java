@@ -82,8 +82,16 @@ public class ForumSchedulerEventShigenEnd extends ForumSchedulerEventShigen {
         server.dispatchCommand(sender, "/world " + w.getName());
         server.dispatchCommand(sender, "/pos1 16,39,16");
         server.dispatchCommand(sender, "/pos2 -17,39,-17");
+        server.dispatchCommand(sender, "region define -w " + w.getName() + " base1");
+        server.dispatchCommand(sender, "/pos1 -5,40,6");
+        server.dispatchCommand(sender, "/pos2 -5,40,0");
         server.dispatchCommand(sender, "region define -w " + w.getName() + " base");
         server.dispatchCommand(sender, "region flag base enderdrafon-block-damage -w " + w.getName() + " deny");
+        server.dispatchCommand(sender, "region flag base1 enderdrafon-block-damage -w " + w.getName() + " deny");
+        server.dispatchCommand(sender, "region flag base use -w " + w.getName() + " allow");
+        server.dispatchCommand(sender, "region flag base chest-access -w " + w.getName() + " allow");
+        server.dispatchCommand(sender, "region flag base water-flow -w " + w.getName() + " deny");
+        server.dispatchCommand(sender, "region flag base lava-flow -w " + w.getName() + " deny");
 
         // 旧資源にいる人を強制転送
         for (Player p : old.getPlayers() ) {
