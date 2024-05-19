@@ -49,6 +49,14 @@ commands:
     description: Setuden command.
     usage: /<command>
     permission: setuden.entrance
+  setent:
+    description: Setuden command.
+    usage: /<command>
+    permission: setuden.setentrance
+  setentrance:
+    description: Setuden command.
+    usage: /<command>
+    permission: setuden.setentrance
   plzombie:
     description: Setuden command.
     usage: /<command>

@@ -6,27 +6,14 @@ import java.util.logging.Level;
 import jp.minecraftuser.ecoframework.PluginFrame;
 import jp.minecraftuser.ecoframework.CommandFrame;
 import jp.minecraftuser.ecoframework.ConfigFrame;
-import jp.minecraftuser.setuden.command.EntCommand;
-import jp.minecraftuser.setuden.command.PlzombieCommand;
-import jp.minecraftuser.setuden.command.SetmsgCommand;
-import jp.minecraftuser.setuden.command.TestCommand;
-import jp.minecraftuser.setuden.command.SetudenCommand;
-import jp.minecraftuser.setuden.command.SetudenMkbaseCommand;
-import jp.minecraftuser.setuden.command.SetudenMkbaseendCommand;
-import jp.minecraftuser.setuden.command.SetudenPermissionCommand;
-import jp.minecraftuser.setuden.command.SetudenPermissionSetCommand;
-import jp.minecraftuser.setuden.command.SetudenPermissionUnsetCommand;
-import jp.minecraftuser.setuden.command.SetudenReloadCommand;
-import jp.minecraftuser.setuden.command.WhoisCommand;
+import jp.minecraftuser.setuden.command.*;
 import jp.minecraftuser.setuden.config.SetudenConfig;
 import jp.minecraftuser.setuden.config.PluginConfigUpdate;
 import jp.minecraftuser.setuden.config.SetudenPermissionConfig;
 import jp.minecraftuser.setuden.db.WhoisDB;
-import jp.minecraftuser.setuden.listener.DeathListener;
-import jp.minecraftuser.setuden.listener.GuardListener;
-import jp.minecraftuser.setuden.listener.PlayerListener;
-import jp.minecraftuser.setuden.listener.TestListener;
+import jp.minecraftuser.setuden.listener.*;
 import jp.minecraftuser.setuden.scheduler.ForumScheduler;
+import org.bukkit.Bukkit;
 
 /**
  *
@@ -34,12 +21,18 @@ import jp.minecraftuser.setuden.scheduler.ForumScheduler;
  */
 public class Setuden  extends PluginFrame {
 
+    public static Setuden instance;
+
+    public static String OUTGOING_PLUGIN_CHANNEL = "bsuite:warps-in";
+    public static String INCOMING_PLUGIN_CHANNEL = "bsuite:warps-out";
     /**
      * プラグイン開始処理
      */
     @Override
     public void onEnable() {
         initialize();
+        registerChannels();
+        instance = this;
     }
 
     /**
@@ -94,6 +87,8 @@ public class Setuden  extends PluginFrame {
         registerPluginCommand(new SetmsgCommand(this, "setmsg"));
         registerPluginCommand(new EntCommand(this, "ent"));
         registerPluginCommand(new EntCommand(this, "entrance"));
+        registerPluginCommand(new SetEntCommand(this, "setent"));
+        registerPluginCommand(new SetEntCommand(this, "setentrance"));
         registerPluginCommand(new PlzombieCommand(this, "plzombie"));
         registerPluginCommand(new TestCommand(this, "test"));
     }
@@ -107,8 +102,15 @@ public class Setuden  extends PluginFrame {
         registerPluginListener(new DeathListener(this, "death"));
         registerPluginListener(new GuardListener(this, "guard"));
         registerPluginListener(new TestListener(this, "test"));
+        registerPluginListener(new WarpListener(this, "warp"));
     }
 
+    private void registerChannels() {
+        Bukkit.getMessenger().registerIncomingPluginChannel(this,
+                INCOMING_PLUGIN_CHANNEL, new WarpMessageListener());
+        Bukkit.getMessenger().registerOutgoingPluginChannel(this,
+                OUTGOING_PLUGIN_CHANNEL);
+    }
     /**
      * タイマー処理の初期化と登録
      */
