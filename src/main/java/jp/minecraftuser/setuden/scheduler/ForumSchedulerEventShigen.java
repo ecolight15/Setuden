@@ -118,8 +118,8 @@ public class ForumSchedulerEventShigen extends ForumSchedulerEvent {
         server.dispatchCommand(sender, "/pos1 16," + (high - 1) + ",16");
         server.dispatchCommand(sender, "/pos2 -17," + (high - 1) + ",-17");
         server.dispatchCommand(sender, "region define -w " + w.getName() + " base1");
-        server.dispatchCommand(sender, "/pos1 16," + (high + 10) + ",16");
-        server.dispatchCommand(sender, "/pos2 -17," + (high + 10) + ",-17");
+        server.dispatchCommand(sender, "/pos1 16," + (high + 8) + ",16");
+        server.dispatchCommand(sender, "/pos2 -17," + (high + 8) + ",-17");
         server.dispatchCommand(sender, "region define -w " + w.getName() + " base2");
         server.dispatchCommand(sender, "/pos1 -5," + (high) + ",6");
         server.dispatchCommand(sender, "/pos2 -5," + (high + 1) + ",0");
