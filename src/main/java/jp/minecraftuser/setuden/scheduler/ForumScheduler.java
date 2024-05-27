@@ -40,6 +40,8 @@ public class ForumScheduler extends TimerFrame{
             if (plg.getPluginFrame("EcoAdmin") != null) {
                 plg.getServer().dispatchCommand(plg.getServer().getConsoleSender(), "ecoadmin:lock プラグインの起動シーケンス中です。少々お待ちください。");
             }
+            // path のファイルを削除する
+            boolean delete = file.delete();
         }
         Date date = new Date();
         prevminofweek = (int) (date.getTime() / 60000);
