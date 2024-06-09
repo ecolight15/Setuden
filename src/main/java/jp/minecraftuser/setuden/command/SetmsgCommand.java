@@ -47,7 +47,8 @@ public class SetmsgCommand extends CommandFrame {
     public boolean worker(CommandSender sender, String[] args) {
         if (args.length == 0) {
             ((WhoisDB)plg.getDB("whois")).updateMassage((OfflinePlayer) sender, null);
-            SendLineMessage(sender, ((WhoisDB)plg.getDB("whois")).getWhois(sender.getName()));
+
+            sendPluginMessage(plg, sender, ((WhoisDB)plg.getDB("whois")).getWhois(sender.getName(), sender.isOp()));
         } else {
             // 自分のメッセージ設定
             StringBuilder str = new StringBuilder();
@@ -58,21 +59,9 @@ public class SetmsgCommand extends CommandFrame {
                 str.append(args[i]);
             }
             ((WhoisDB)plg.getDB("whois")).updateMassage((OfflinePlayer) sender, Utl.repColor(str.toString()));
-            SendLineMessage(sender, ((WhoisDB)plg.getDB("whois")).getWhois(sender.getName()));
+            sendPluginMessage(plg, sender, ((WhoisDB)plg.getDB("whois")).getWhois(sender.getName(), sender.isOp()));
         }
         return true;
-    }
-
-    public void SendLineMessage(CommandSender sender,List<String> msg_list) {
-        boolean first = true;
-        for (String s : msg_list) {
-            if (first) {
-                sendPluginMessage(plg, sender, s);
-                first = false;
-            } else {
-                sendTagMessage(plg, sender, "", s);
-            }
-        }
     }
 
 }

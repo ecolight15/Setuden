@@ -18,6 +18,7 @@ import java.io.File;
 import jp.minecraftuser.ecoframework.PluginFrame;
 import jp.minecraftuser.ecoframework.ListenerFrame;
 import static jp.minecraftuser.ecoframework.Utl.sendPluginMessage;
+import jp.minecraftuser.setuden.Setuden;
 import jp.minecraftuser.setuden.timer.LoginDBTimer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -103,6 +104,7 @@ public class PlayerListener extends ListenerFrame {
         if(!pl.hasPlayedBefore()){
             prev_visitor += 1;
             plg.getServer().broadcastMessage("["+pl.getName()+"]さんは"+prev_visitor+"人目の新規さんです。");
+            ((Setuden)plg).offline_player_name_list.insert(event.getPlayer().getName());
         }
         new LoginDBTimer(plg, "logout_timer", pl, true).runTaskLaterAsynchronously(plg, 1);
     }

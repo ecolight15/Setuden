@@ -13,18 +13,24 @@ import jp.minecraftuser.setuden.config.SetudenPermissionConfig;
 import jp.minecraftuser.setuden.db.WhoisDB;
 import jp.minecraftuser.setuden.listener.*;
 import jp.minecraftuser.setuden.scheduler.ForumScheduler;
+import jp.minecraftuser.setuden.trie.Trie;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 
 /**
  *
  * @author ecolight
  */
-public class Setuden  extends PluginFrame {
+public class Setuden extends PluginFrame {
 
     public static Setuden instance;
 
     public static String OUTGOING_PLUGIN_CHANNEL = "bsuite:warps-in";
     public static String INCOMING_PLUGIN_CHANNEL = "bsuite:warps-out";
+
+    //オフラインプレイヤー名のリストをTrie形式で保存するリスト
+    public Trie offline_player_name_list = new Trie();
+
     /**
      * プラグイン開始処理
      */
@@ -33,6 +39,14 @@ public class Setuden  extends PluginFrame {
         initialize();
         registerChannels();
         instance = this;
+
+        OfflinePlayer[] offlinePlayers = this.getServer().getOfflinePlayers();
+        for (OfflinePlayer offlinePlayer : offlinePlayers) {
+            String name = offlinePlayer.getName();
+            if(name != null) {
+                offline_player_name_list.insert(offlinePlayer.getName());
+            }
+        }
     }
 
     /**
