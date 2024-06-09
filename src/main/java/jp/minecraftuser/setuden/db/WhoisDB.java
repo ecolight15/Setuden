@@ -6,20 +6,18 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import jp.minecraftuser.ecoframework.PluginFrame;
 import jp.minecraftuser.ecoframework.DatabaseFrame;
+import jp.minecraftuser.ecoframework.PluginFrame;
 import jp.minecraftuser.ecomqttserverlog.EcoMQTTServerLog;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Statistic;
-
 /**
  * @author ecolight
  */
@@ -33,7 +31,8 @@ public class WhoisDB extends DatabaseFrame {
      * @throws java.lang.ClassNotFoundException
      * @throws java.sql.SQLException
      */
-    String total_play_time_format = new String("%d日%02d時間%02d分%02d秒");
+    private String total_play_time_format = new String("%d時間(%d日%02d時間%02d分%02d秒)");
+    private String location_format = "world[%s] X[%d] Y[%d] Z[%d]";
 
     public WhoisDB(PluginFrame plg_, String name_) throws ClassNotFoundException, SQLException {
         super(plg_, "whois.db", name_);
@@ -115,32 +114,35 @@ public class WhoisDB extends DatabaseFrame {
         return exist;
     }
 
-    public List<String> getWhois(String name) {
+    public String getWhois(String name, Boolean isOp) {
         // UUID問い合わせプラグインの検出
         EcoMQTTServerLog logp = (EcoMQTTServerLog) plg.getServer().getPluginManager().getPlugin("EcoMQTTServerLog");
-        List<String> whoisTextList = new ArrayList<>();
+        StringBuilder whoisText = new StringBuilder();
         if (logp != null) {
             UUID uuid = logp.latestUUID(name);
+            if(uuid == null){
+                return "Player UUID not Found";
+            }
             OfflinePlayer pl = plg.getServer().getOfflinePlayer(uuid);
             if (pl.isBanned()) {
-                whoisTextList.add("Whois[" + name + "] *** Banned Player *** ");
-                whoisTextList.addAll(getWhoisDate(uuid));
-                return whoisTextList;
+                whoisText.append("Whois[").append(name).append("] *** Banned Player *** ").append("\n");
+                whoisText.append(getWhoisDate(uuid, isOp));
+                return whoisText.toString();
             } else {
-                whoisTextList.add("Whois[" + name + "]");
-                whoisTextList.addAll(getWhoisDate(uuid));
-                return whoisTextList;
+                whoisText.append("Whois[").append(name).append("]").append("\n");
+                whoisText.append(getWhoisDate(uuid, isOp));
+                return whoisText.toString();
             }
         } else {
-            whoisTextList.add("Whois[" + name + "]");
-            whoisTextList.addAll(getWhoisDate(plg.getServer().getOfflinePlayer(name).getUniqueId()));
-            return whoisTextList;
+            whoisText.append("Whois[").append(name).append("]").append("\n");
+            whoisText.append(getWhoisDate(plg.getServer().getOfflinePlayer(name).getUniqueId(), isOp));
+            return whoisText.toString();
             //return "UUID Plugin Not Ready.";
         }
 
     }
 
-    private List<String> getWhoisDate(UUID uuid) {
+    private String getWhoisDate(UUID uuid, Boolean isOp) {
         PreparedStatement prep = null;
         ResultSet rs = null;
         String msg = null;
@@ -148,7 +150,8 @@ public class WhoisDB extends DatabaseFrame {
         Date quit = null;
         Connection con = null;
         OfflinePlayer player = plg.getServer().getOfflinePlayer(uuid);
-        List<String> whoisTextList = new ArrayList<>();
+
+        StringBuilder whoisText = new StringBuilder();
         if (uuid != null) {
             try {
                 con = connect();
@@ -184,52 +187,61 @@ public class WhoisDB extends DatabaseFrame {
                 } catch (SQLException ex1) {
                     Logger.getLogger(WhoisDB.class.getName()).log(Level.SEVERE, null, ex1);
                 }
-                whoisTextList.add("database read error.");
-                return whoisTextList;
+
+                whoisText.append("database read error.");
+                return whoisText.toString();
 
             }
         }
 
-
         SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss ");
 
         if ((login == null) || (login.getTime() == 0)) {
-            whoisTextList.add("最終ログイン　:" + ChatColor.GOLD + "No record.");
+            whoisText.append("最終ログイン　:").append(ChatColor.GOLD).append("No record.").append(ChatColor.RESET).append("\n");
         } else {
-            whoisTextList.add("最終ログイン　:" + ChatColor.GOLD + sdf1.format(login));
+            whoisText.append("最終ログイン　:").append(ChatColor.GOLD).append(sdf1.format(login)).append(ChatColor.RESET).append("\n");
         }
         if ((quit == null) || (quit.getTime() == 0)) {
-            whoisTextList.add("最終ログアウト:" + ChatColor.GOLD + "No record.");
+            whoisText.append("最終ログアウト:").append(ChatColor.GOLD).append("No record.").append(ChatColor.RESET).append("\n");
         } else {
-            whoisTextList.add("最終ログアウト:" + ChatColor.GOLD + sdf1.format(quit));
+            whoisText.append("最終ログアウト:").append(ChatColor.GOLD).append(sdf1.format(quit)).append(ChatColor.RESET).append("\n");
         }
 
         if (player.getFirstPlayed() == 0) {
-            whoisTextList.add("初回ログイン　:" + ChatColor.GOLD + "No record.");
+            whoisText.append("初回ログイン　:").append(ChatColor.GOLD).append("No record.").append(ChatColor.RESET).append("\n");
         } else {
             Date first_login = new Date(player.getFirstPlayed());
-
-            whoisTextList.add("初回ログイン　:" + ChatColor.GOLD + sdf1.format(first_login));
+            whoisText.append("初回ログイン　:").append(ChatColor.GOLD).append(sdf1.format(first_login)).append(ChatColor.RESET).append("\n");
         }
 
-        if (player.getStatistic(Statistic.TOTAL_WORLD_TIME) == 0) {
-            whoisTextList.add("合計プレイ時間:" + ChatColor.GOLD + "No record.");
+        if (player.getStatistic(Statistic.PLAY_ONE_MINUTE) == 0) {
+            whoisText.append("合計プレイ時間:").append(ChatColor.GOLD).append("No record.").append(ChatColor.RESET).append("\n");
         } else {
-            long total_play_second = player.getStatistic(Statistic.TOTAL_WORLD_TIME) / 20;
+            long total_play_second = player.getStatistic(Statistic.PLAY_ONE_MINUTE) / 20;
+            long play_hours = total_play_second / 3600;
             long play_day = total_play_second / 86400;
-            long play_hour = total_play_second % 3600;
+            long play_hour = (total_play_second % 86400) / 3600;
             long play_minute = (total_play_second % 3600) / 60;
             long play_second = total_play_second % 60;
-            StringBuilder b = new StringBuilder();
-            b.append("合計プレイ時間:").append(ChatColor.GOLD).append(String.format(total_play_time_format, play_day, play_hour, play_minute, play_second));
-            whoisTextList.add(b.toString());
+            whoisText.append("合計プレイ時間:").append(ChatColor.GOLD).append(String.format(total_play_time_format, play_hours, play_day, play_hour, play_minute, play_second)).append(ChatColor.RESET).append("\n");
         }
-
 
         if (msg != null) {
-            whoisTextList.add("コメント　　　:" + ChatColor.GOLD + msg);
+            whoisText.append("コメント　　　:").append(ChatColor.GOLD).append(msg).append(ChatColor.RESET);
+        } else {
+            whoisText.append("コメント　　　:").append(ChatColor.GOLD).append("No record.").append(ChatColor.RESET);
         }
-        return whoisTextList;
+        //OPならロケーションも表示
+        if (isOp) {
+            Location loc = player.getLocation();
+            if (loc != null &&loc.getWorld() != null) {
+                whoisText.append("\n").append("ロケーション　:").append(ChatColor.GOLD).append(String.format(location_format, loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ())).append(ChatColor.RESET);
+            } else {
+                whoisText.append("\n").append("ロケーション　:").append(ChatColor.GOLD).append("No record.").append(ChatColor.RESET);
+            }
+        }
+
+        return whoisText.toString();
     }
 
     public void update(UUID uuid, Date login, Date quit) {
